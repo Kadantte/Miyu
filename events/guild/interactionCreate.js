@@ -1,5 +1,4 @@
 const { InteractionType, PermissionsBitField } = require("discord.js");
-const ytsr = require("@distube/ytsr");
 const { SEARCH_DEFAULT } = require("../../settings/config.js")
 
 module.exports = async(client, interaction) => {
@@ -17,22 +16,38 @@ module.exports = async(client, interaction) => {
 
         if (interaction.type == InteractionType.ApplicationCommandAutocomplete) {
             const Random = SEARCH_DEFAULT[Math.floor(Math.random() * SEARCH_DEFAULT.length)];
+            
             if(interaction.commandName == "play") {
+                const result = await client.manager.search(interaction.options.getString("search") || Random, interaction.user).catch(() => { });
+                if (!result) return await interaction.respond([]).catch(() => { });
                 let choice = []
-                await ytsr(interaction.options.getString("search") || Random, { safeSearch: true, limit: 10 }).then(result => {
-                    result.items.forEach(x => { choice.push({ name: x.name, value: x.url }) })
+                result.tracks.forEach(x => {
+                    choice.push({
+                        name: x.title.slice(0, 100),
+                        value: x.uri
+                    });
                 });
                 return await interaction.respond(choice).catch(() => { });
             } else if (interaction.options.getSubcommand() == "playskip") {
+                const result = await client.manager.search(interaction.options.getString("search") || Random, interaction.user).catch(() => { });
+                if (!result) return await interaction.respond([]).catch(() => { });
                 let choice = []
-                await ytsr(interaction.options.getString("search") || Random, { safeSearch: true, limit: 10 }).then(result => {
-                    result.items.forEach(x => { choice.push({ name: x.name, value: x.url }) })
+                result.tracks.forEach(x => {
+                    choice.push({
+                        name: x.title.slice(0, 100),
+                        value: x.uri
+                    });
                 });
                 return await interaction.respond(choice).catch(() => { });
             } else if (interaction.options.getSubcommand() == "playtop") {
+                const result = await client.manager.search(interaction.options.getString("search") || Random, interaction.user).catch(() => { });
+                if (!result) return await interaction.respond([]).catch(() => { });
                 let choice = []
-                await ytsr(interaction.options.getString("search") || Random, { safeSearch: true, limit: 10 }).then(result => {
-                    result.items.forEach(x => { choice.push({ name: x.name, value: x.url }) })
+                result.tracks.forEach(x => {
+                    choice.push({
+                        name: x.title.slice(0, 100),
+                        value: x.uri
+                    });
                 });
                 return await interaction.respond(choice).catch(() => { });
             }

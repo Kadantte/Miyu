@@ -2,6 +2,10 @@ const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const { Connectors } = require("shoukaku");
 const { Kazagumo, Plugins } = require("kazagumo");
 
+process.on('unhandledRejection', console.error);
+process.on('uncaughtException', console.error);
+process.on('uncaughtExceptionMonitor', console.error);
+
 const client = new Client({
     shards: "auto",
     intents: [
